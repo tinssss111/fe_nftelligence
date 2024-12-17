@@ -6,7 +6,7 @@ import { useState } from "react";
 import { shortAddress } from "../lib/utils";
 
 export interface NFTListing {
-  datum: {
+  datums: {
     assetName: string;
     policyId: string;
     price: bigint;
@@ -20,11 +20,13 @@ export interface NFTListing {
   };
   utxo: {
     address: string;
-    assets: { [policyId: string]: string };
+    assets: {
+      [policyId: string]: bigint;
+    };
     datum: string;
-    datumHash?: string;
+    datumHash?: string | null | undefined;
     outputIndex: number;
-    scriptRef?: string;
+    scriptRef?: string | null | undefined;
     txHash: string;
   };
 }
@@ -42,7 +44,7 @@ const MarketPlace = () => {
       const contractAddress = lucid.utils.validatorToAddress(validator);
       console.log(contractAddress);
 
-      const free = (BigInt(nft.datum.price) * 1n * 10n ** 6n) / 100n;
+      const free = (BigInt(nft.datums.price) * 1n * 10n ** 6n) / 100n;
 
       const sellerC = lucid.utils.keyHashToCredential(
         "addr_test1qq599ef7wtkrg2a4em7205yt9pelcm7crvak89rntq7h7stzels95pmwrl6steksyy60uf7d2xsygs8dfns6c6nyrvwq4xxvz0"
@@ -54,12 +56,13 @@ const MarketPlace = () => {
       const tx = await lucid
         .newTx()
         .payToAddress(sellerAddress, {
-          lovelace: BigInt(nft.datum.price),
+          lovelace: BigInt(nft.datums.price),
         })
         .payToAddress(markerAddress, {
           lovelace: free,
         })
-        .collectFrom([nft.utxo], redeemer)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        .collectFrom([nft.utxo as any], redeemer)
         .attachSpendingValidator(validator)
         .complete();
       console.log("Transaction built successfully:", tx);

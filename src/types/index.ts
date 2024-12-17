@@ -17,6 +17,8 @@ export interface NFT {
         };
     };
     onchain_metadata_standard: string;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onchain_metadata_extra: null | any; // Điều này cần sửa đổi để cụ thể hơn
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     metadata: null | any; // Điều này cần sửa đổi để cụ thể hơn
 }

@@ -51,12 +51,13 @@ class BlockfrostSE {
         try {
             const utxos = await this.getUtxos(address);
 
-            const nonLovelaceAssets = utxos.flatMap(utxo =>
-                utxo.amount.filter(asset => asset.unit !== 'lovelace')
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const nonLovelaceAssets = utxos.flatMap((utxo: { amount: any[]; }) =>
+                utxo.amount.filter((asset: { unit: string; }) => asset.unit !== 'lovelace')
             );
 
             const nftDetails = await Promise.all(
-                nonLovelaceAssets.map(async (asset) => {
+                nonLovelaceAssets.map(async (asset: { unit: string; }) => {
                     const assetDe = await this.getAsset(asset.unit);
 
                     if (

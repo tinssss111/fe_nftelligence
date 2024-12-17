@@ -9,6 +9,6 @@ const nftMarketplaceDatumShema = Data.Object({
 
 })
 
-type NFTMarketplaceDatum = Data.Static<typeof nftMarketplaceDatumShema>;
+type NFTMarketplaceDatum = Data.Static<typeof nftMarketplaceDatumShema>; /*unresolved*/
 
-export const NFTMarketplaceDatum = nftMarketplaceDatumShema as unknown as NFTMarketplaceDatum;
+export const NFTMarketplaceDatum = nftMarketplaceDatumShema as unknown as NFTMarketplaceDatum; 

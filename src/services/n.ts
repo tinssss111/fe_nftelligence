@@ -7,6 +7,7 @@ import Blockfrost from "./blockfrost";
 
 
 const useFetchNFTsFromMarketplace = (lucid: Lucid | null) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [nfts, setNfts] = useState<any[]>([]);
 
     useEffect(() => {
@@ -40,7 +41,7 @@ const useFetchNFTsFromMarketplace = (lucid: Lucid | null) => {
                         }
 
                         try {
-                            const datum = Data.from<NFTMarketplaceDatum>(utxo.datum, NFTMarketplaceDatum);
+                            const datum = Data.from(utxo.datum, NFTMarketplaceDatum);
                             const blockfrost = new Blockfrost();
                             const asset = await blockfrost.getAsset(datum.policyId + datum.assetName);
 
