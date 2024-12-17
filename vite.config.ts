@@ -1,23 +1,25 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import wasm from 'vite-plugin-wasm';
-import topLevelAwait from 'vite-plugin-top-level-await';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import { nodePolyfills } from "vite-plugin-node-polyfills";
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), wasm(), topLevelAwait()],
+  plugins: [
+    react(),
+    nodePolyfills({
+      protocolImports: true, // Hỗ trợ các import dạng node:crypto
+    }),
+  ],
   resolve: {
     alias: {
-      'node-fetch': 'node-fetch-polyfill',
+      // Polyfill các module cần thiết
+      buffer: "buffer",
+      crypto: "crypto-browserify",
+      stream: "stream-browserify",
+      util: "util",
+      process: "process/browser",
     },
   },
-  optimizeDeps: {
-    esbuildOptions: {
-      target: 'es2020',
-    },
-    exclude: ['lucid-cardano'],
+  define: {
+    global: "window", // Định nghĩa global cho các module phụ thuộc
   },
-  build: {
-    target: 'es2020',
-  },
-})
+});
